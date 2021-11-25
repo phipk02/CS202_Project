@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+.vs\CS202_Project\v17\Browse.VC.opendb
+.vs\CS202_Project\v17\Browse.VC.db
