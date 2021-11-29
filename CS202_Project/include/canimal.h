@@ -1,8 +1,8 @@
 #pragma once
 
-#include "cobject.h"
-
-class CANIMAL : public COBJECT {
+#ifndef CANIMAL_H_
+#define CANIMAL_H_
+class CANIMAL {
 public:
     virtual void move(int, int) = 0;
 
@@ -22,3 +22,5 @@ public:
 
     void tell();    
 };
+
+#endif // !CANIMAL_H_

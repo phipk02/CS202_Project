@@ -10,68 +10,43 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
-#include <wtypes.h>
+// #include <wtypes.h>
 #include <stdio.h>      /* printf, scanf, puts, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>
+#include <vector>
 
 using namespace std;
 
-enum class GAME_STATE{MENU, LEVEL_1, LEVEL_2, LEVEL_3, GAMEOVER};
-
 typedef void* HANDLE;
 
+enum class GAMESTATE {LEVEL1, LEVEL2, LEVEL3, PAUSE, MENU, SETTINGS, LOADGAME_MENU, SAVEGAME, GAMEOVER, LOADGAME_PAUSE};
+
 class CGAME {
-    CTRUCK* axt;
-    CCAR* axh;
-    CDINOSAUR* akl;
-    CBIRD* ac;
-    CPEOPLE cn;
+private:
+    // Objects
     vector<CANIMAL*> animals;
-    const int rowCount = 7;
-    const int maxVehicle = 5;
-    vector<vector<CVEHICLE*>> vehicles;
-    vector<sf::Sprite> sprites;
+    vector<CVEHICLE*> vehicles;
+    CPEOPLE player;
 
+    //
+    GAMESTATE state = GAMESTATE::MENU;
+    GAMESTATE level = GAMESTATE::LEVEL1;
+    Menu menu;
+    sf::Event event;
 
-    GAME_STATE gameState = GAME_STATE::MENU;
-    Menu *menu = nullptr;
-
-    void initVariables();
-    void initWindow();
-    void initVehicle();
 
     sf::RenderWindow* window;
-    sf::Event event;
     sf::VideoMode videoMode;
 
-    sf::RectangleShape enemy;
-    sf::Texture texture;
-    sf::Sprite background;
-
-public:
-    CGAME(); 
-    void drawGame(); 
-    ~CGAME(); 
-    CPEOPLE getPeople();
-    CVEHICLE* getVehicle();
-    CANIMAL* getAnimal(); 
-    void resetGame(); 
-    void exitGame(HANDLE); 
-    void startGame(); 
-    void loadGame(istream&); 
-    void saveGame(istream&); 
-    void pauseGame(HANDLE); 
-    void resumeGame(HANDLE); 
-    void updatePosPeople(char);
-    void updatePosVehicle(); 
-    void updatePosAnimal();
-    void drawBackground(const string &backgroundIMG);
-    void resizeImage(sf::Sprite& sprite);
-
+private:
+    void pollEvents();
     void update();
     void render();
-    void pollEvents();
-    void GetDesktopResolution();
-    const bool running() const;
+
+public:
+    CGAME();
+    ~CGAME();
+
+    void run();
 };

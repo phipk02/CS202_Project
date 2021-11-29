@@ -1,8 +1,8 @@
 #pragma once
 
-#include "cobject.h"
-
-class CVEHICLE : public COBJECT {
+#ifndef CVEHICLE_H_
+#define CVEHICLE_H_
+class CVEHICLE {
     // bool state; // 0: moving, 1: stopped
 protected:
     int mX, mY;
@@ -20,3 +20,5 @@ class CTRUCK : public CVEHICLE {
 public:
     void move(int, int);
 };
+
+#endif // !CVEHICLE_H_
