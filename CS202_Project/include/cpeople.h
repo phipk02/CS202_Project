@@ -6,14 +6,18 @@
 class CPEOPLE : public COBJECT
 {
     bool mState;
+    sf::Texture pTexture;
+    sf::Sprite pSprite;
+    float moveSpeed;
 public:
     CPEOPLE();
-    void moveUp(int);
-    void moveLeft(int);
-    void moveRight(int);
-    void moveDown(int);
+    void moveUp();
+    void moveLeft();
+    void moveRight();
+    void moveDown();
     bool isImpact(const CVEHICLE*&);
     bool isImpact(const CANIMAL*&);
     bool isFinish();
     bool isDead();
+    void render(sf::RenderTarget*);
 };
