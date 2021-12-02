@@ -15,12 +15,14 @@ protected:
     sf::Texture vTexture;
     sf::Sprite vSprite;
     float moveSpeed;
+    bool canMove;
     friend class CGAME;
 public:
     //virtual void move(int, int) = 0;
     virtual void move() = 0;
     virtual void render(sf::RenderTarget*) = 0;
     virtual const sf::FloatRect getBounds() const = 0;
+    void checkCollision(CVEHICLE* other, TrafficLight* tl) = 0;
 };
 
 class CCAR : public CVEHICLE {
@@ -30,6 +32,7 @@ public:
     void move();
     void render(sf::RenderTarget*);
     const sf::FloatRect getBounds() const;
+    void checkCollision(CVEHICLE* , TrafficLight*);
 };
 
 class CTRUCK : public CVEHICLE {
@@ -39,6 +42,7 @@ public:
     void move();
     void render(sf::RenderTarget*);
     const sf::FloatRect getBounds() const;
+    void checkCollision(CVEHICLE*, TrafficLight*);
 };
 
 #endif // !CVEHICLE_H_
