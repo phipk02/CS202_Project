@@ -8,6 +8,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include<SFML/Network.hpp>
+#include "ctrafficlight.h"
 
 class CVEHICLE {
     // bool state; // 0: moving, 1: stopped
@@ -22,7 +23,7 @@ public:
     virtual void move() = 0;
     virtual void render(sf::RenderTarget*) = 0;
     virtual const sf::FloatRect getBounds() const = 0;
-    void checkCollision(CVEHICLE* other, TrafficLight* tl) = 0;
+    virtual void checkCollision(CVEHICLE* other, TrafficLight* tl) = 0;
 };
 
 class CCAR : public CVEHICLE {
