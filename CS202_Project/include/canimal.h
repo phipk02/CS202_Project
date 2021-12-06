@@ -1,26 +1,29 @@
-#pragma once
-
 #ifndef CANIMAL_H_
 #define CANIMAL_H_
-class CANIMAL {
+
+#include "Object.hpp"
+#include "ResourceIdentifiers.hpp"
+
+#include <SFML/Graphics/Sprite.hpp>
+
+class CANIMAL : public Object {
 public:
-    virtual void move(int, int) = 0;
-
-    virtual void tell() = 0;
-};
-
-class CDINOSAUR: public CANIMAL {
+    enum Type { 
+        Dinosaur,
+        Bird, 
+    };
 public:
-    void move(int, int);
+    CANIMAL(Type type, const TextureHolder& textures);
+    virtual unsigned int	getCategory() const;
 
-    void tell();
-};
+    // Action functions
 
-class CBIRD: public CANIMAL {
-public:
-    void move(int, int);
+private:
+    virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    void tell();    
+private:
+    Type mType;
+    sf::Sprite mSprite;
 };
 
 #endif // !CANIMAL_H_

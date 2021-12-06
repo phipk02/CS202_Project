@@ -1,17 +1,37 @@
-#include "../include/canimal.h"
+#include <../include/canimal.h>
+#include <../include/ResourceHolder.hpp>
 
-void CBIRD::move(int x, int y) {
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
 
+
+Textures::ID toTextureID(CANIMAL::Type type)
+{
+	switch (type)
+	{
+		case CANIMAL::Bird:
+			return Textures::Bird;
+
+		case CANIMAL::Dinosaur:
+			return Textures::Dinosaur;
+	}
+	return Textures::Bird;
 }
 
-void CBIRD::tell() {
-
+CANIMAL::CANIMAL(Type type, const TextureHolder& textures)
+: mType(type)
+, mSprite(textures.get(toTextureID(type)))
+{
+	sf::FloatRect bounds = mSprite.getLocalBounds();
+	mSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 }
 
-void CDINOSAUR::move(int x, int y) {
-
+void CANIMAL::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	target.draw(mSprite, states);
 }
 
-void CDINOSAUR::tell() {
-
+unsigned int CANIMAL::getCategory() const
+{
+	return Category::Enemy;
 }
