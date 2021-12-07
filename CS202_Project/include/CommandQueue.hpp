@@ -1,21 +1,21 @@
-#ifndef BOOK_COMMANDQUEUE_HPP
-#define BOOK_COMMANDQUEUE_HPP
+// #ifndef BOOK_COMMANDQUEUE_HPP
+// #define BOOK_COMMANDQUEUE_HPP
 
-#include "Command.hpp"
+// #include "Command.hpp"
 
-#include <queue>
+// #include <queue>
 
 
-class CommandQueue
-{
-	public:
-		void						push(const Command& command);
-		Command						pop();
-		bool						isEmpty() const;
+// class CommandQueue
+// {
+// 	public:
+// 		void						push(const Command& command);
+// 		Command						pop();
+// 		bool						isEmpty() const;
 
 		
-	private:
-		std::queue<Command>			mQueue;
-};
+// 	private:
+// 		std::queue<Command>			mQueue;
+// };
 
-#endif // BOOK_COMMANDQUEUE_HPP
+// #endif // BOOK_COMMANDQUEUE_HPP

@@ -1,25 +1,25 @@
-#ifndef OBJECT_HPP
-#define OBJECT_HPP
+// #ifndef OBJECT_HPP
+// #define OBJECT_HPP
 
-#include "../include/SceneNode.hpp"
-
-
-class Object : public SceneNode
-{
-	public:
-		void				setVelocity(sf::Vector2f velocity);
-		void				setVelocity(float vx, float vy);
-		void				accelerate(sf::Vector2f velocity);
-		void				accelerate(float vx, float vy);
-		sf::Vector2f		getVelocity() const;
+// #include "../include/SceneNode.hpp"
 
 
-	private:
-		virtual void		updateCurrent(sf::Time dt);
+// class Object : public SceneNode
+// {
+// 	public:
+// 		void				setVelocity(sf::Vector2f velocity);
+// 		void				setVelocity(float vx, float vy);
+// 		void				accelerate(sf::Vector2f velocity);
+// 		void				accelerate(float vx, float vy);
+// 		sf::Vector2f		getVelocity() const;
 
 
-	private:
-		sf::Vector2f		mVelocity;
-};
+// 	private:
+// 		virtual void		updateCurrent(sf::Time dt);
 
-#endif // OBJECT_HPP
+
+// 	private:
+// 		sf::Vector2f		mVelocity;
+// };
+
+// #endif // OBJECT_HPP
