@@ -1,7 +1,7 @@
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
 
-#include <../include/SceneNode.hpp>
+#include "../include/SceneNode.hpp"
 
 
 class Object : public SceneNode

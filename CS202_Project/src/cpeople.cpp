@@ -1,8 +1,8 @@
-#include <../include/cpeople.h>
-#include <../include/CommandQueue.hpp>
-#include <../include/canimal.h>
-#include <../include/cvehicle.h>
-#include <../include/Foreach.hpp>
+#include "../include/cpeople.h"
+#include "../include/CommandQueue.hpp"
+#include "../include/canimal.h"
+#include "../include/cvehicle.h"
+#include "../include/Foreach.hpp"
 
 #include <map>
 #include <string>

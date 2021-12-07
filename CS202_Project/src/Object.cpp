@@ -1,4 +1,4 @@
-#include <../include/Object.hpp>
+#include "../include/Object.hpp"
 
 
 void Object::setVelocity(sf::Vector2f velocity)

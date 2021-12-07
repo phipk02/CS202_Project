@@ -1,5 +1,5 @@
-#include <../include/canimal.h>
-#include <../include/ResourceHolder.hpp>
+#include "../include/canimal.h"
+#include "../include/ResourceHolder.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>

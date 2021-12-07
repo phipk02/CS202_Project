@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -116,12 +116,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SFML_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\SFML-2.5.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\OneDrive - VNU-HCMUS\2nd year\Programming System\game\SFML-2.5.1-windows-vc15-64-bit\SFML-2.5.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>E:\SFML-2.5.1\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>F:\OneDrive - VNU-HCMUS\2nd year\Programming System\game\SFML-2.5.1-windows-vc15-64-bit\SFML-2.5.1\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system-s.lib;sfml-audio-s.lib;sfml-window-s.lib;sfml-graphics-s.lib;sfml-system.lib;sfml-graphics.lib;sfml-window.lib;sfml-audio.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -145,23 +145,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\CS202_Project\include\canimal.h" />
-    <ClInclude Include="..\..\..\CS202_Project\include\casset.h" />
-    <ClInclude Include="..\..\..\CS202_Project\include\cgame.h" />
-    <ClInclude Include="..\..\..\CS202_Project\include\cobject.h" />
-    <ClInclude Include="..\..\..\CS202_Project\include\cpeople.h" />
-    <ClInclude Include="..\..\..\CS202_Project\include\cvehicle.h" />
-    <ClInclude Include="..\..\..\CS202_Project\include\menu.h" />
-    <ClInclude Include="..\..\..\CS202_Project\include\Windows.h" />
-    <ClInclude Include="resource.h" />
+    <ClCompile Include="src\canimal.cpp" />
+    <ClCompile Include="src\cmenu.cpp" />
+    <ClCompile Include="src\cpeople.cpp" />
+    <ClCompile Include="src\ctrafficlight.cpp" />
+    <ClCompile Include="src\cvehicle.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Object.cpp" />
+    <ClCompile Include="src\SceneNode.cpp" />
+    <ClCompile Include="src\SpriteNode.cpp" />
+    <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\CS202_Project\src\addition_function.cpp" />
-    <ClCompile Include="..\..\..\CS202_Project\src\canimal.cpp" />
-    <ClCompile Include="..\..\..\CS202_Project\src\cgame.cpp" />
-    <ClCompile Include="..\..\..\CS202_Project\src\cmenu.cpp" />
-    <ClCompile Include="..\..\..\CS202_Project\src\cpeople.cpp" />
-    <ClCompile Include="..\..\..\CS202_Project\src\cvehicle.cpp" />
+    <ClInclude Include="include\canimal.h" />
+    <ClInclude Include="include\Category.hpp" />
+    <ClInclude Include="include\Command.hpp" />
+    <ClInclude Include="include\CommandQueue.hpp" />
+    <ClInclude Include="include\cpeople.h" />
+    <ClInclude Include="include\ctrafficlight.h" />
+    <ClInclude Include="include\cvehicle.h" />
+    <ClInclude Include="include\Foreach.hpp" />
+    <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\menu.h" />
+    <ClInclude Include="include\Object.hpp" />
+    <ClInclude Include="include\ResourceHolder.hpp" />
+    <ClInclude Include="include\ResourceIdentifiers.hpp" />
+    <ClInclude Include="include\SceneNode.hpp" />
+    <ClInclude Include="include\SpriteNode.hpp" />
+    <ClInclude Include="include\Windows.h" />
+    <ClInclude Include="include\World.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

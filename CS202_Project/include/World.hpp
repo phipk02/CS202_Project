@@ -1,15 +1,15 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
-#include <../include/ResourceHolder.hpp>
-#include <../include/ResourceIdentifiers.hpp>
-#include <../include/SceneNode.hpp>
-#include <../include/SpriteNode.hpp>
-#include <../include/canimal.h>
-#include <../include/cvehicle.h>
-#include <../include/cpeople.h>
-#include <../include/CommandQueue.hpp>
-#include <../include/Command.hpp>
+#include "../include/ResourceHolder.hpp"
+#include "../include/ResourceIdentifiers.hpp"
+#include "../include/SceneNode.hpp"
+#include "../include/SpriteNode.hpp"
+#include "../include/canimal.h"
+#include "../include/cvehicle.h"
+#include "../include/cpeople.h"
+#include "../include/CommandQueue.hpp"
+#include "../include/Command.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/View.hpp>

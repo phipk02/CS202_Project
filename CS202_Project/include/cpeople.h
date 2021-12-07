@@ -4,7 +4,7 @@
 
 #include "cvehicle.h"
 #include "canimal.h"
-#include <CommandQueue.hpp>
+#include "CommandQueue.hpp"
 
 #include "ResourceIdentifiers.hpp"
 
