@@ -1,427 +1,69 @@
-#include "Game.h"
+#include "../include/Game.h"
 
-CGAME::CGAME(sf::RenderWindow* _win) { //CHECKED    
-    
-    win = _win;
+int GameState::level = 1;
+// World* GameState::mWorld = nullptr;
 
-    scrInstruction.loadFromFile("asset\\instruction.png");
-    sprInstruction.setTexture(scrInstruction);
-    sprInstruction.setScale(0.375, 0.375);
-
-    scrPause.loadFromFile("asset\\pause.png");
-    sprPause.setTexture(scrPause);
-    sprPause.setScale(0.375, 0.375);
-
-    scrSave.loadFromFile("asset\\save.png");
-    sprSave.setTexture(scrSave);
-    sprSave.setScale(0.375, 0.375);
-
-    scrSettings.loadFromFile("asset\\settings.png");
-    sprSettings.setTexture(scrSettings);
-    sprSettings.setScale(0.375, 0.375);
-
-    scrDeadScene.loadFromFile("asset\\hitted.png");
-    sprDeadScene.setTexture(scrDeadScene);
-    sprDeadScene.setScale(0.375, 0.375);
-
-    scrEnd.loadFromFile("asset\\DEAD.png");
-    sprEnd.setTexture(scrEnd);
-    sprEnd.setScale(0.375, 0.375);
-
-    scrWc1.loadFromFile("asset\\welcomelv1.png");
-    sprWc1.setTexture(scrWc1);
-    sprWc1.setScale(0.375, 0.375);
-
-    scrWc2.loadFromFile("asset\\welcomelv2.png");
-    sprWc2.setTexture(scrWc2);
-    sprWc2.setScale(0.375, 0.375);
-
-    scrWc3.loadFromFile("asset\\welcomelv3.png");
-    sprWc3.setTexture(scrWc3);
-    sprWc3.setScale(0.375, 0.375);
-
-    scrGame1.loadFromFile("asset\\level1.png");
-    sprGame1.setTexture(scrGame1);
-    sprGame1.setScale(0.375, 0.375);
-
-    scrGame2.loadFromFile("asset\\level2.png");
-    sprGame2.setTexture(scrGame2);
-    sprGame2.setScale(0.375, 0.375);
-
-    scrGame3.loadFromFile("asset\\level3.png");
-    sprGame3.setTexture(scrGame3);
-    sprGame3.setScale(0.375, 0.375);
-
+GameState::GameState(StateStack& stack, Context context)
+: State(stack, context)
+// , mWorld(*context.window)
+// , mPlayer(*context.player)
+{
+	// if (!mWorld) mWorld = new World(*context.window);
 }
 
-int CGAME::run(int level) {
-    if (level > 3) return 0;
-    win->clear();
-    switch (level) {
-        case 1: win->draw(sprWc1); sprGame = sprGame1;  break;
-        case 2: win->draw(sprWc2); sprGame = sprGame2; break;
-        case 3: win->draw(sprWc3); sprGame = sprGame3; break;
-    }
-    win->display();
-
-    // OBJECTS SET UP STATE
-    CTRUCK truck(level, 115);
-    CCAR car(level, 350);
-    CBIRD bird(level, 180);
-    CDINOSAUR dino(level, 260);
-    int time = 0;
-    TrafficLight trl1, trl2;
-    trl1.setPosition(700, 100);
-    trl2.setPosition(200, 330);
-
-    birdFlow.clear(); 
-    dinoFlow.clear(); 
-    carFlow.clear();
-    truckFlow.clear();
-
-    birdFlow.push_back(bird);
-    dinoFlow.push_back(dino);
-    carFlow.push_back(car);
-    truckFlow.push_back(truck);
-
-    player.resetState();
-
-    bool startMove = false;
-    bool dead = false;
-
-    while (true) { 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) break;
-    }
-
-    while(true) {
-
-        win->clear();
-        win->draw(sprGame);
-        player.render(win);
-        for (int i = 0; i < dinoFlow.size(); i++) {
-            dinoFlow[i].move();
-            dinoFlow[i].render(win);
-            if (player.isImpact(&dinoFlow[i])) dead = true;
-        }
-        for(int i = 0; i < birdFlow.size(); i++) {
-            birdFlow[i].move(); 
-            birdFlow[i].render(win);
-            if (player.isImpact(&birdFlow[i])) dead = true;
-        }
-        for (int i = 0; i < carFlow.size(); i++) {
-            if (i == carFlow.size() - 1) carFlow[i].checkCollision(nullptr, &trl2);
-            else carFlow[i].checkCollision(&carFlow[i+1], &trl2);
-            carFlow[i].move(); 
-            carFlow[i].render(win);
-            if (player.isImpact(&carFlow[i])) dead = true;
-        }
-        for (int i = 0; i < truckFlow.size(); i++) {
-            if (i == truckFlow.size() - 1) truckFlow[i].checkCollision(nullptr, &trl1);
-            else truckFlow[i].checkCollision(&truckFlow[i+1], &trl1);
-            truckFlow[i].move();
-            truckFlow[i].render(win);
-            if (player.isImpact(&truckFlow[i])) dead = true;
-        }
-        trl1.render(win);
-        trl2.render(win);
-        win->display();
-
-        if (dead) {
-            win->clear();
-            win->draw(sprDeadScene);
-            win->display();
-            while(true) {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) break;
-            }
-            win->clear();
-            win->draw(sprEnd);
-            win->display();
-            while (true) {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) return 1;
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) return 0;
-            }
-        }
-
-        time++;     //spawn enemies
-        if (time % (2000/level) == 0) {
-            birdFlow.insert(birdFlow.begin(), bird);
-            dinoFlow.insert(dinoFlow.begin(), dino);
-        }
-        if (time % (2300/level) == 0) {
-            carFlow.insert(carFlow.begin(), car);
-            truckFlow.insert(truckFlow.begin(), truck);
-        }
-        if (time % 5000 == 0) trl2.switchLight();
-        if (time % 4500 == 0) trl1.switchLight();
-        
-        if (truckFlow[truckFlow.size() - 1].getBound().left >= 1285) truckFlow.pop_back();
-        if (dinoFlow[dinoFlow.size() - 1].getBound().left >= 970) dinoFlow.pop_back();
-        if (birdFlow[birdFlow.size() - 1].getBound().left <= -50) birdFlow.pop_back();
-        if (carFlow[carFlow.size() - 1].getBound().left <= -50) carFlow.pop_back();
-
-        if (startMove) {
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) player.moveLeft();
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) player.moveRight();
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) player.moveUp();
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)) player.moveDown();
-        }
-        if (player.isVictory()) return 2;
-        if (truckFlow.size() > 2) startMove = true;
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
-            while (true) {
-                win->clear();
-                win->draw(sprPause);
-                win->display();
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) break;
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) { //INSTRUCTION
-                    win->clear();
-                    win->draw(sprInstruction);
-                    win->display();
-                    while (true) {
-                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) break;
-                    }
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) { //SETTINGS
-                    win->clear();
-                    win->draw(sprSettings);
-                    win->display();
-                    while(true) {
-                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) break;
-                    }
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) return 0;
-            }
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) { //SAVE GAME
-            saveGame(level, win);
-            win->clear();
-            win->draw(sprSave);
-            win->display();
-            while (true) {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) break;
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) return 0;
-            }
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)) return 3;  // return main to load and restart game
-        
-    }
+void GameState::draw()
+{
+	// mWorld.draw();
 }
 
-int loadGame (sf::RenderWindow* win) {
-                
-                std::cout << "\nLoadGame\n";
-                int lv = 1;
-                
-                win->clear();
-                sf::Font font;
-                font.loadFromFile("asset\\myfont.ttf");
-                sf::Event evnt;
-                sf::String filename;
-                sf::Text playerInput;
-                playerInput.setFont(font);
-                playerInput.setCharacterSize(30);
-                playerInput.setPosition(400, 250);
+bool GameState::update(sf::Time dt)
+{
+	// mWorld.update(dt);
 
-                sf::Texture scrLoad; scrLoad.loadFromFile("asset\\loadgame.png");
-                sf::Sprite sprLoad(scrLoad);
-                sprLoad.setScale(0.375, 0.375);
+	// CommandQueue& commands = mWorld.getCommandQueue();
+	// mPlayer.handleRealtimeInput(commands);
 
-                std::string mFilename;
-
-                
-                    bool toBreak = false;
-                    int i = 0;
-                    while(win->pollEvent(evnt) && i < 10000) {
-                        if(evnt.type == sf::Event::TextEntered) {  }
-                        i++;
-                    }
-                    while(true) {
-                        win->clear();
-                        win->draw(sprLoad);
-                        win->draw(playerInput);
-                        win->display();
-                    while(win->pollEvent(evnt)) {
-                        
-                        if(evnt.type == sf::Event::TextEntered) {
-                            if (evnt.text.unicode == 46 || (evnt.text.unicode > 60 && evnt.text.unicode < 123)) {
-                                filename += evnt.text.unicode;
-                                mFilename += evnt.text.unicode;
-                                playerInput.setString(filename);
-                            }
-                            
-                        }
-                        
-                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-                            toBreak = true;
-                            break;
-                        }
-                    }
-                    if (toBreak) break;
-                }
-                //win.close();
-                std::ifstream fin;
-                fin.open(mFilename, std::ios::binary);
-                if (fin.is_open()) {
-                    fin.read((char*)&lv, sizeof(int));
-                } else std::cout << "Cannot open file \n";
-                fin.close();
-      return lv;          
+	return true;
 }
 
-void CGAME::saveGame (int level, sf::RenderWindow*win) {
-    std::cout << "\nSaveGame\n";
-                
-                win->clear();
-                sf::Font font;
-                font.loadFromFile("asset\\myfont.ttf");
-                sf::Event evnt;
-                sf::String filename;
-                sf::Text playerInput;
-                playerInput.setFont(font);
-                playerInput.setCharacterSize(30);
-                playerInput.setPosition(400, 250);
+bool GameState::handleEvent(const sf::Event& event)
+{
+	// Game input handling
+	// CommandQueue& commands = mWorld.getCommandQueue();
+	// mPlayer.handleEvent(event, commands);
 
-                sf::Texture scrSave; scrSave.loadFromFile("asset\\savegame.png");
-                sf::Sprite sprSave(scrSave);
-                sprSave.setScale(0.375, 0.375);
+	// Escape pressed, trigger the pause screen
+	if (event.type == sf::Event::KeyPressed) {
+		if (event.key.code == sf::Keyboard::Escape) {
+			std::cout << "Game -> Pause no pop\n";
+			requestStackPush(States::Pause);
+		}
+		else if (event.key.code == sf::Keyboard::T) {
+			std::cout << "Game -> Load no pop\n";
+			requestStackPush(States::Load);
+		}
+		else if (event.key.code == sf::Keyboard::L) {
+			std::cout << "Game -> Save no pop\n";
+			requestStackPush(States::Save);
+		}
+	}
 
-                std::string mFilename;
-
-                for (int i = 0; i < 10000; i++) {
-                    win->pollEvent(evnt);
-                }
-                int toBreak = false;
-                while (true) {
-                    win->clear();
-                    win->draw(sprSave);
-                    win->draw(playerInput);
-                    win->display();
-                    while(win->pollEvent(evnt)) {
-                         
-                        if(evnt.type == sf::Event::TextEntered) {
-                            if (evnt.text.unicode == 46 || (evnt.text.unicode > 60 && evnt.text.unicode < 123)) {
-                                filename += evnt.text.unicode;
-                                mFilename += evnt.text.unicode;
-                                playerInput.setString(filename);
-                            }
-                           
-                        }
-                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-                            toBreak = true;
-                            break;
-                        }
-                    }
-                    if (toBreak) break;
-                }
-
-            std::ofstream fout;
-            fout.open(mFilename, std::ios::binary);
-            if (fout.is_open()) {
-                fout.write((char*)&level, sizeof(int));
-            }
-            fout.close();
-        return;
+	return true;
 }
 
+void GameState::changeLevel(int _level) {
+	level = _level;
+	std::cout << "Change successfully!\n";
+}
 
-// #include "../include/Game.h"
-// #include <string>
+int GameState::getLevel() {
+	return level;
+}
 
-// #include <SFML/Window/Event.hpp>
+void GameState::save(const std::string& filename) {
+	std::cout << "GameState::save\n";
+}
 
-
-// const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
-
-// Game::Game()
-// : mWindow(sf::VideoMode(1920, 1080), "Crossy Road", sf::Style::Close)
-// , mWorld(mWindow)
-// , mFont()
-// , mStatisticsText()
-// , mStatisticsUpdateTime()
-// , mStatisticsNumFrames(0)
-// {
-// 	mFont.loadFromFile(""); // Font loaded from file
-// 	mStatisticsText.setFont(mFont);
-// 	mStatisticsText.setPosition(5.f, 5.f);
-// 	mStatisticsText.setCharacterSize(10);
-// }
-
-// void Game::run()
-// {
-// 	sf::Clock clock;
-// 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-// 	while (mWindow.isOpen())
-// 	{
-// 		sf::Time elapsedTime = clock.restart();
-// 		timeSinceLastUpdate += elapsedTime;
-// 		while (timeSinceLastUpdate > TimePerFrame)
-// 		{
-// 			timeSinceLastUpdate -= TimePerFrame;
-
-// 			processEvents();
-// 			update(TimePerFrame);
-
-// 		}
-
-// 		updateStatistics(elapsedTime);
-// 		render();
-// 	}
-// }
-
-// void Game::processEvents()
-// {
-// 	sf::Event event;
-// 	while (mWindow.pollEvent(event))
-// 	{
-// 		switch (event.type)
-// 		{
-// 			case sf::Event::KeyPressed:
-// 				handlePlayerInput(event.key.code, true);
-// 				break;
-
-// 			case sf::Event::KeyReleased:
-// 				handlePlayerInput(event.key.code, false);
-// 				break;
-
-// 			case sf::Event::Closed:
-// 				mWindow.close();
-// 				break;
-// 		}
-// 	}
-// }
-
-// void Game::update(sf::Time elapsedTime)
-// {
-// 	mWorld.update(elapsedTime);
-// }
-
-// void Game::render()
-// {
-// 	mWindow.clear();	
-// 	mWorld.draw();
-
-// 	mWindow.setView(mWindow.getDefaultView());
-// 	mWindow.draw(mStatisticsText);
-// 	mWindow.display();
-// }
-
-// void Game::updateStatistics(sf::Time elapsedTime)
-// {
-// 	mStatisticsUpdateTime += elapsedTime;
-// 	mStatisticsNumFrames += 1;
-
-// 	if (mStatisticsUpdateTime >= sf::seconds(1.0f))
-// 	{
-// 		mStatisticsText.setString(
-// 			"Frames / Second = " + to_string(mStatisticsNumFrames) + "\n" +
-// 			"Time / Update = " + to_string(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us");
-							 
-// 		mStatisticsUpdateTime -= sf::seconds(1.0f);
-// 		mStatisticsNumFrames = 0;
-// 	}
-// }
-
-// void Game::handlePlayerInput(sf::Keyboard::Key, bool)
-// {
-// }
+void GameState::load(const std::string& filename) {
+	std::cout << "GameState::load\n";
+}
