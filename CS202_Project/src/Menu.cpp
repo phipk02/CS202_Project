@@ -90,6 +90,8 @@ bool MenuState::handleEvent(const sf::Event& event)
 		}
         else if (mOptionIndex == LoadGame) {
 			std::cout << "Menu -> Load no pop\n";
+			requestStackPop();
+			requestStackPush(States::Game);
             requestStackPush(States::Load);
         }
         else if (mOptionIndex == Settings) {
