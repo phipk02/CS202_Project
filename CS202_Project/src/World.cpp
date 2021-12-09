@@ -1,22 +1,22 @@
-// #include "../include/World.hpp"
+#include "../include/World.h"
 
-// World::World(sf::RenderWindow& window)
-// : mWindow(window)
+World::World(sf::RenderWindow& window)
+: mWindow(window)
 // , mWorldView(window.getDefaultView())
-// , mTextures() 
+, mTextures() 
 // , mSceneGraph()
 // , mSceneLayers()
 // , mWorldBounds(0.f, 0.f, mWorldView.getSize().x, 2000.f)
 // , mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y / 2.f)
 // , mScrollSpeed(-50.f)
 // , mPlayer(nullptr)
-// {
-// 	loadTextures();
-// 	buildScene();
+{
+	loadTextures();
+	// buildScene();
 
-// 	// Prepare the view
-// 	mWorldView.setCenter(mSpawnPosition);
-// }
+	// Prepare the view
+	mWorldView.setCenter(mSpawnPosition);
+}
 
 // void World::update(sf::Time dt)
 // {
@@ -45,15 +45,15 @@
 // 	mWindow.draw(mSceneGraph);
 // }
 
-// void World::loadTextures()
-// {
-// 	mTextures.load(Textures::Background, "Background.png");
-// 	mTextures.load(Textures::Bird, "Bird.png");
-// 	mTextures.load(Textures::Car, "Car.png");
-// 	mTextures.load(Textures::Dinosaur, "Dinosaur.png");
-// 	mTextures.load(Textures::Player, "Player.png");
-// 	mTextures.load(Textures::Truck, "Truck.png");
-// }
+void World::loadTextures()
+{
+	mTextures.load(Textures::Background, "../asset/Background.png");
+	mTextures.load(Textures::Bird, "../asset/Bird.png");
+	mTextures.load(Textures::Car, "../asset/Car.png");
+	mTextures.load(Textures::Dinosaur, "../asset/Dinosaur.png");
+	mTextures.load(Textures::Player, "../asset/Player.png");
+	mTextures.load(Textures::Truck, "../asset/Truck.png");
+}
 
 // void World::buildScene()
 // {
