@@ -5,7 +5,7 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/Drawable.hpp>
-#include <Command.hpp>
+#include "Command.hpp"
 
 #include <vector>
 #include <memory>

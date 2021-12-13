@@ -1,4 +1,4 @@
-#include "ctrafficlight.h"
+#include "../include/ctrafficlight.h"
 
 TrafficLight::TrafficLight() {
     //lightRed.loadFromFile("asset\\traffic light.png", sf::IntRect(121, 0, 120, 191));

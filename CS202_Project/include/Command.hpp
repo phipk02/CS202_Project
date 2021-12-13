@@ -33,7 +33,7 @@
  *  commands to the correct recipients
 */
 
-#include <Category.hpp>
+#include "Category.hpp"
 
 #include <SFML/System/Time.hpp>
 
