@@ -1,30 +1,30 @@
-#ifndef RESOURCEIDENTIFIERS_HPP
-#define RESOURCEIDENTIFIERS_HPP
+// #ifndef RESOURCEIDENTIFIERS_HPP
+// #define RESOURCEIDENTIFIERS_HPP
 
 
-// Forward declaration of SFML classes
-namespace sf
-{
-	class Texture;
-}
+// // Forward declaration of SFML classes
+// namespace sf
+// {
+// 	class Texture;
+// }
 
-namespace Textures
-{
-	enum ID
-	{
-        Background,
-        Bird,
-        Car,
-        Dinosaur,
-        Player,
-		Truck,
-	};
-}
+// namespace Textures
+// {
+// 	enum ID
+// 	{
+//         Background,
+//         Bird,
+//         Car,
+//         Dinosaur,
+//         Player,
+// 		Truck,
+// 	};
+// }
 
-// Forward declaration and a few type definitions
-template <typename Resource, typename Identifier>
-class ResourceHolder;
+// // Forward declaration and a few type definitions
+// template <typename Resource, typename Identifier>
+// class ResourceHolder;
 
-typedef ResourceHolder<sf::Texture, Textures::ID> TextureHolder;
+// typedef ResourceHolder<sf::Texture, Textures::ID> TextureHolder;
 
-#endif // RESOURCEIDENTIFIERS_HPP
+// #endif // RESOURCEIDENTIFIERS_HPP
