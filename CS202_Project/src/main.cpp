@@ -162,9 +162,3 @@ int main() {
     return 0;
 }
 
-
-/*
-compile
-g++ -c main.cpp -I"C:\Users\Administrator\Documents\SFML-2.5.1\include" -I"D:\CS202\GameHandle"
-g++ main.o -o main -L"C:\Users\Administrator\Documents\SFML-2.5.1\lib" -L"D:\CS202\GameHandle" -lsfml-graphics -lsfml-window -lsfml-system
-*/
