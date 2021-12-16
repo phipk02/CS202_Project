@@ -2,8 +2,8 @@
 #include "../include/Utility.h"
 #include "../include/ResourceHolder.h"
 
-#include "ParallelTask.cpp"
-#include "Utility.cpp"
+//#include "ParallelTask.cpp"
+//#include "Utility.cpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
