@@ -3,8 +3,15 @@
 //#include "State.cpp"
 //#include "StateStack.cpp"
 
+sf::SoundBuffer* Application::mSoundBuffer = nullptr;
+sf::Sound* Application::mSound = nullptr;
 bool Application::sound = true;
 const sf::Time Application::TimePerFrame = sf::seconds(1.f/60.f);
+
+Application::~Application() {
+	delete[] mSound;
+	delete[] mSoundBuffer;
+};
 
 Application::Application()
 : mWindow(sf::VideoMode(900, 600), "Game", sf::Style::Close)
@@ -15,6 +22,19 @@ Application::Application()
 , mStatisticsUpdateTime()
 , mStatisticsNumFrames(0)
 {
+	mSoundBuffer = new sf::SoundBuffer[2];
+	mSound = new sf::Sound[2];
+
+	mSoundBuffer[0].loadFromFile("E:/CS202/Project1/Project1/asset/Sound/Menu.wav");
+	mSoundBuffer[1].loadFromFile("E:/CS202/Project1/Project1/asset/Sound/GamePlay.wav");
+
+	for (int i = 0; i < 2; i++) {
+		mSound[i].setBuffer(mSoundBuffer[i]);
+		mSound[i].setLoop(true);
+	}
+
+	//if (sound) mSound[0].play();
+
 	mStateStack = new StateStack(State::Context(mWindow, mTextures, mFonts));
 
 	mWindow.setKeyRepeatEnabled(false);
@@ -42,9 +62,7 @@ Application::Application()
 	mStatisticsText.setFillColor(sf::Color::Red);
 
 	registerStates();
-	mStateStack -> pushState(States::Menu);
-
-	mWindow.setKeyRepeatEnabled(true);
+	mStateStack -> pushState(States::Loading);
 }
 
 void Application::run()
@@ -128,4 +146,7 @@ void Application::registerStates()
 	mStateStack -> registerState<SaveState>(States::Save);
 	mStateStack -> registerState<LoadState>(States::Load);
 	mStateStack -> registerState<SettingsState>(States::Settings);
+	mStateStack -> registerState<EndState>(States::End);
+	mStateStack -> registerState<FailState>(States::Fail);
+
 }

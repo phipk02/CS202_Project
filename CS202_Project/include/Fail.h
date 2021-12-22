@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef END_H
-#define END_H
+#ifndef FAIL_H
+#define FAIL_H
 
 #include "State.h"
 #include "Application.h"
@@ -10,10 +10,10 @@
 #include <SFML/Graphics/Text.hpp>
 
 
-class EndState : public State
+class FailState : public State
 {
 public:
-	EndState(StateStack& stack, Context context);
+	FailState(StateStack& stack, Context context);
 
 	virtual void			draw();
 	virtual bool			update(sf::Time dt);
@@ -40,7 +40,7 @@ private:
 	std::vector<sf::Text>	mOptions;
 	std::size_t				mOptionIndex;
 
-	sf::Text				mCongratulationText;
+	sf::Text				mFailText;
 };
 
-#endif // END_H
+#endif // FAIL_H

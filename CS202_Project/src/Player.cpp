@@ -9,7 +9,7 @@ Player::Player(const TextureHolder& textures) {
     centerOrigin(mSprite);
     mSprite.setScale(2.5f, 2.5f);
     mSprite.setPosition(450.f, 580.f);
-    mSpeed = 500.f;
+    mSpeed = 2000.f;
     mStatus = Status::Running;
     setVelocity(0.f, 0.f);
 };
@@ -61,6 +61,7 @@ void Player::update(sf::Time dt) {
         mVelocity.y /= std::sqrt(2.f);
     }
     mSprite.move(mVelocity.x * mSpeed * dt.asSeconds(), mVelocity.y * mSpeed * dt.asSeconds());
+    std::cout << mSprite.getPosition().x << " " << mSprite.getPosition().y << "\n";
 }
 
 void Player::setPosition(sf::Vector2f& other) {

@@ -1,4 +1,4 @@
-#include "../include/Menu.h"
+#include "../include/End.h"
 #include "../include/Utility.h"
 #include "../include/Foreach.h"
 #include "../include/ResourceHolder.h"
@@ -6,46 +6,45 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 
-
-MenuState::MenuState(StateStack& stack, Context context)
-: State(stack, context)
-, mOptions()
-, mOptionIndex(0)
+EndState::EndState(StateStack& stack, Context context)
+	: State(stack, context)
+	, mOptions()
+	, mOptionIndex(0)
 {
-
 	sf::Texture& texture = context.textures->get(Textures::Background);
 	sf::Font& font = context.fonts->get(Fonts::Main);
 
 	mBackgroundSprite.setTexture(texture);
 
-	mStateName.setFont(font);
-    mStateName.setString("MENU");
-    centerOrigin(mStateName);
-    mStateName.setCharacterSize(50);
-    mStateName.setStyle(sf::Text::Bold);
-    mStateName.setPosition(context.window->getView().getSize().x / 2.f, 55.f);
-	
-	// A simple menu demonstration
-    sf::Text newOption;
-	newOption.setFont(font);
-	newOption.setString("New game");
-	centerOrigin(newOption);
-	newOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, -45.f));
-	mOptions.push_back(newOption);
+	mCongratulationText.setFont(font);
+	mCongratulationText.setString("CONGRATULATIONS! ONE MORE GAME?");
+	mCongratulationText.setCharacterSize(20u);
+	centerOrigin(mCongratulationText);
+	mCongratulationText.setStyle(sf::Text::Bold);
+	mCongratulationText.setFillColor(sf::Color::Red);
+	mCongratulationText.setPosition(context.window->getView().getSize().x / 2.f, 200.f);
 
-    sf::Text loadOption;
+	// A simple menu demonstration
+	sf::Text tryAgainOption;
+	tryAgainOption.setFont(font);
+	tryAgainOption.setString("Try again");
+	centerOrigin(tryAgainOption);
+	tryAgainOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, -45.f));
+	mOptions.push_back(tryAgainOption);
+
+	sf::Text loadOption;
 	loadOption.setFont(font);
 	loadOption.setString("Load game");
 	centerOrigin(loadOption);
 	loadOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, -15.f));
 	mOptions.push_back(loadOption);
 
-    sf::Text settingsOption;
-	settingsOption.setFont(font);
-	settingsOption.setString("Settings");
-	centerOrigin(settingsOption);
-	settingsOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, 15.f));
-	mOptions.push_back(settingsOption);
+	sf::Text mainMenuOption;
+	mainMenuOption.setFont(font);
+	mainMenuOption.setString("Return to main menu");
+	centerOrigin(mainMenuOption);
+	mainMenuOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, 15.f));
+	mOptions.push_back(mainMenuOption);
 
 	sf::Text exitOption;
 	exitOption.setFont(font);
@@ -57,26 +56,25 @@ MenuState::MenuState(StateStack& stack, Context context)
 	updateOptionText();
 }
 
-void MenuState::draw()
+void EndState::draw()
 {
 	sf::RenderWindow& window = *getContext().window;
 
 	window.setView(window.getDefaultView());
 	window.draw(mBackgroundSprite);
+	window.draw(mCongratulationText);
 
-    window.draw(mStateName);
-
-	FOREACH(const sf::Text& text, mOptions)
+	FOREACH(const sf::Text & text, mOptions)
 		window.draw(text);
 }
 
-bool MenuState::update(sf::Time)
+bool EndState::update(sf::Time)
 {
 	playSound();
-	return true;
+	return false;
 }
 
-bool MenuState::handleEvent(const sf::Event& event)
+bool EndState::handleEvent(const sf::Event& event)
 {
 	// The demonstration menu logic
 	if (event.type != sf::Event::KeyPressed)
@@ -84,24 +82,25 @@ bool MenuState::handleEvent(const sf::Event& event)
 
 	if (event.key.code == sf::Keyboard::Return)
 	{
-		if (mOptionIndex == NewGame)
+		if (mOptionIndex == TryAgain)
 		{
-			std::cout << "Menu -> Game pop\n";
-			requestStackPop();
+			std::cout << "End -> Game clear push game\n";
+			requestStateClear();
 			requestStackPush(States::Game);
 		}
-        else if (mOptionIndex == LoadGame) {
-			std::cout << "Menu -> Load no pop\n";
-            requestStackPush(States::Load);
-        }
-        else if (mOptionIndex == Settings) {
-			std::cout << "Menu -> Settings no pop\n";
-            requestStackPush(States::Settings);
-        }
+		else if (mOptionIndex == LoadGame) {
+			std::cout << "End -> Load clear, push game load\n";
+			requestStackPush(States::Load);
+		}
+		else if (mOptionIndex == ReturnMainMenu) {
+			std::cout << "End -> Menu clear push\n";
+			requestStateClear();
+			requestStackPush(States::Menu);
+		}
 		else if (mOptionIndex == Exit)
 		{
 			// The exit option was chosen, by removing itself, the stack will be empty, and the game will know it is time to close.
-			requestStackPop();
+			requestStateClear();
 		}
 	}
 
@@ -127,23 +126,23 @@ bool MenuState::handleEvent(const sf::Event& event)
 		updateOptionText();
 	}
 
-	return true;
+	return false;
 }
 
-void MenuState::updateOptionText()
+void EndState::updateOptionText()
 {
 	if (mOptions.empty())
 		return;
 
 	// White all texts
-	FOREACH(sf::Text& text, mOptions)
+	FOREACH(sf::Text & text, mOptions)
 		text.setFillColor(sf::Color::White);
 
 	// Red the selected text
 	mOptions[mOptionIndex].setFillColor(sf::Color::Red);
 }
 
-void MenuState::playSound() {
+void EndState::playSound() {
 	if (Application::sound) {
 		if (Application::mSound[0].getStatus() == sf::Sound::Stopped) Application::mSound[0].play();
 		Application::mSound[1].stop();

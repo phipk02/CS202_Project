@@ -12,6 +12,7 @@ SettingsState::SettingsState(StateStack& stack, Context context)
 , mOptions()
 , mOptionIndex(0)
 {
+
 	sf::Texture& texture = context.textures->get(Textures::Background);
 	sf::Font& font = context.fonts->get(Fonts::Main);
 
@@ -89,6 +90,7 @@ void SettingsState::draw()
 
 bool SettingsState::update(sf::Time)
 {
+	playSound();
 	return false;
 }
 
@@ -154,4 +156,15 @@ void SettingsState::updateOptionText()
 
 	// Red the selected text
 	mOptions[mOptionIndex].setFillColor(sf::Color::Red);
+}
+
+void SettingsState::playSound() {
+	if (Application::sound) {
+		if (Application::mSound[0].getStatus() == sf::Sound::Stopped) Application::mSound[0].play();
+		Application::mSound[1].stop();
+	}
+	else {
+		Application::mSound[0].stop();
+		Application::mSound[1].stop();
+	}
 }

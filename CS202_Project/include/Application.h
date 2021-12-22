@@ -15,18 +15,24 @@
 #include "Save.h"
 #include "Load.h"
 #include "Settings.h"
+#include "End.h"
+#include "Fail.h"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Audio.hpp>
 
 
 class Application
 {
 	public:
 								Application();
+								~Application();
 		void					run();
 
+		static sf::SoundBuffer*	mSoundBuffer;
+		static sf::Sound*		mSound;
 		static bool				sound;
 		
 	private:
