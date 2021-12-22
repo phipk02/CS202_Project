@@ -5,6 +5,7 @@
 
 #include "State.h"
 #include "Game.h"
+#include "Application.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -22,6 +23,8 @@ class SaveState : public State
 		virtual bool			update(sf::Time dt);
 		virtual bool			handleEvent(const sf::Event& event);
 
+		void					playSound();
+
 		void					updateOptionText();
         void                    save(const std::string& filename);
 
@@ -35,6 +38,10 @@ class SaveState : public State
             Return,
 		};
 
+		enum OptionNext {
+			Continue,
+			ReturnMainMenu,
+		};
 
 	private:
 		sf::Sprite				mBackgroundSprite;
@@ -43,6 +50,9 @@ class SaveState : public State
 
 		std::vector<sf::Text>	mOptions;
 		std::size_t				mOptionIndex;
+
+		std::vector<sf::Text>	mNextOptions;
+		std::size_t				mNextOptionsIndex;
 
         bool                    isFinished;
 };

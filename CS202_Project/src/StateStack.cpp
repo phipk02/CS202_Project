@@ -1,13 +1,16 @@
+#pragma once
+
 #include "../include/StateStack.h"
+#include "../include/Foreach.h"
 
 #include <cassert>
 
 
 StateStack::StateStack(State::Context context)
-: mStack()
-, mPendingList()
-, mContext(context)
-, mFactories()
+	: mStack()
+	, mPendingList()
+	, mContext(context)
+	, mFactories()
 {
 }
 
@@ -26,7 +29,7 @@ void StateStack::update(sf::Time dt)
 void StateStack::draw()
 {
 	// Draw all active states from bottom to top
-	FOREACH(State::Ptr& state, mStack)
+	FOREACH(State::Ptr & state, mStack)
 		state->draw();
 }
 
@@ -76,17 +79,17 @@ void StateStack::applyPendingChanges()
 	{
 		switch (change.action)
 		{
-			case Push:
-				mStack.push_back(createState(change.stateID));
-				break;
+		case Push:
+			mStack.push_back(createState(change.stateID));
+			break;
 
-			case Pop:
-				mStack.pop_back();
-				break;
+		case Pop:
+			mStack.pop_back();
+			break;
 
-			case Clear:
-				mStack.clear();
-				break;
+		case Clear:
+			mStack.clear();
+			break;
 		}
 	}
 
@@ -94,7 +97,7 @@ void StateStack::applyPendingChanges()
 }
 
 StateStack::PendingChange::PendingChange(Action action, States::ID stateID)
-: action(action)
-, stateID(stateID)
+	: action(action)
+	, stateID(stateID)
 {
 }

@@ -37,7 +37,7 @@ public:
 
 
 public:
-						State(StateStack& stack, Context context);
+	State(StateStack& stack, Context context);
 	virtual				~State();
 
 	virtual void		draw() = 0;
@@ -54,7 +54,7 @@ protected:
 
 
 private:
-	StateStack* 		mStack;
+	StateStack* mStack;
 	Context				mContext;
 };
 

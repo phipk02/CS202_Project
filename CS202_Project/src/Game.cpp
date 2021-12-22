@@ -15,6 +15,8 @@ bool GameState::mExisted[6];
 GameState::~GameState() {
 	delete mPlayer;
 	mPlayer = nullptr;
+	level = 1;
+	mTrafficLight = false;
 	for (int i = 0; i < 6; i++) {
 		mExisted[i] = false;
 		delete mEnemies[i];
@@ -63,6 +65,17 @@ GameState::GameState(StateStack& stack, Context context)
 
 }
 
+void GameState::playSound() {
+	if (Application::sound) {
+		Application::mSound[0].stop();
+		if (Application::mSound[1].getStatus() == sf::Sound::Stopped) Application::mSound[1].play();
+	}
+	else {
+		Application::mSound[0].stop();
+		Application::mSound[1].stop();
+	}
+}
+
 void GameState::draw()
 {
 	// std::cout << "Draw\n";
@@ -82,7 +95,7 @@ void GameState::draw()
 bool GameState::update(sf::Time dt)
 {
 	// std::cout << "Game update\n";
-
+	playSound();
 	destroyEnemiesOutsideView();
 	for (int i = 0; i < 6; i++) {
 		if (!mExisted[i]) spawnEnemies(i);
@@ -110,13 +123,14 @@ bool GameState::update(sf::Time dt)
 		else {
 			std::cout << "game Pop\n";
 			requestStackPop();
-			// requestStackPush(States::End);
+			requestStackPush(States::End);
 		}
 	}
 	else if (mPlayer -> getStatus() == Player::Status::Failure) {
 		std::cout << "game Pop\n";
+		fail();
 		requestStackPop();
-		// requestStackPush(States::Fail);
+		requestStackPush(States::Fail);
 	}
 	else {
 		for (int i = 0; i < mEnemies.size(); i++) {
@@ -143,14 +157,20 @@ bool GameState::handleEvent(const sf::Event& event)
 		if (event.key.code == sf::Keyboard::Escape) {
 			std::cout << "Game -> Pause no pop\n";
 			requestStackPush(States::Pause);
+			Application::mSound[0].stop();
+			Application::mSound[1].play();
 		}
 		if (event.key.code == sf::Keyboard::T) {
 			std::cout << "Game -> Load no pop\n";
 			requestStackPush(States::Load);
+			Application::mSound[0].stop();
+			Application::mSound[1].play();
 		}
 		if (event.key.code == sf::Keyboard::L) {
 			std::cout << "Game -> Save no pop\n";
 			requestStackPush(States::Save);
+			Application::mSound[0].stop();
+			Application::mSound[1].play();
 		}
 		if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W) {
 			std::cout << "Move up\n";
@@ -242,7 +262,7 @@ void GameState::load(const std::string& filename) {
 void GameState::buildScene() {
 	mPlayer->setStatus(Player::Status::Running);
 
-	mPlayer -> setPosition(450.f, 560.f);
+	mPlayer -> setPosition(450.f, 580.f);
 
 	mPlayer -> setVelocity(0.f, 0.f);
 
@@ -260,7 +280,7 @@ void GameState::buildScene() {
 
 void GameState::adaptPlayerPosition() {
 	sf::FloatRect viewBounds = sf::FloatRect(0, 0, getContext().window -> getView().getSize().x, getContext().window -> getView().getSize().y);
-	const float borderDistance = 40.f;
+	const float borderDistance = 20.f;
 
 	sf::Vector2f position = mPlayer->getPosition();
 	position.x = std::max(position.x, viewBounds.left + borderDistance);
@@ -273,6 +293,22 @@ void GameState::adaptPlayerPosition() {
 void GameState::checkCollisions() {
 	for (int i = 0; i < 6; i++) {
 		if (mPlayer -> getBound().intersects(mEnemies[i] -> getBound())) {
+			if (Application::sound) {
+				sf::SoundBuffer sound;
+				if (mEnemies[i]->getType() == Enemy::Type::Bird)
+					sound.loadFromFile("E:/CS202/Project1/Project1/asset/Sound/Bird.wav");
+				else if (mEnemies[i]->getType() == Enemy::Type::Dinosaur)
+					sound.loadFromFile("E:/CS202/Project1/Project1/asset/Sound/Dino.wav");
+				else
+					sound.loadFromFile("E:/CS202/Project1/Project1/asset/Sound/Car.wav");
+				Application::mSound[1].stop();
+				sf::Sound temp(sound);
+				temp.play();
+				while (temp.getStatus() == sf::Sound::Playing) {
+
+				}
+				temp.stop();
+			}
 			mPlayer -> setStatus(Player::Status::Failure);
 			std::cout << "Player dies\n";
 			return;
@@ -281,7 +317,19 @@ void GameState::checkCollisions() {
 };
 
 void GameState::reachFinishLine() {
-	if (!sf::FloatRect(0.f, 100.f, 900.f, 500.f).contains(mPlayer->getPosition())) mPlayer -> setStatus(Player::Status::Success);
+	if (!sf::FloatRect(0.f, 100.f, 900.f, 500.f).contains(mPlayer->getPosition())) { 
+		if (Application::sound) {
+			sf::SoundBuffer sound;
+			sound.loadFromFile("E:/CS202/Project1/Project1/asset/Sound/Victory.wav");
+			sf::Sound temp(sound);
+			Application::mSound[1].stop();
+			temp.play();
+			while (temp.getStatus() == sf::Sound::Playing) {
+
+			}
+		}
+		mPlayer->setStatus(Player::Status::Success);
+	}
 };
 
 void GameState::spawnEnemies(int index) {
@@ -298,5 +346,56 @@ void GameState::destroyEnemiesOutsideView() {
 			delete mEnemies[i];
 			mExisted[i] = false;
 		}
+	}
+};
+
+void GameState::fail() {
+	sf::SoundBuffer sound;
+	sound.loadFromFile("E:/CS202/Project1/Project1/asset/Sound/Death.wav");
+	sf::Sound temp(sound);
+	if (Application::sound) {
+		temp.play();
+	}
+	
+	sf::FloatRect mWorldBounds = sf::FloatRect(0.f, 0.f, 900.f, 600.f);
+
+	sf::Clock clock;
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
+	sf::RenderWindow* mWindow = getContext().window;
+
+	while (mWorldBounds.contains(mPlayer->getPosition()))
+	{
+		mWindow -> clear();
+		mWindow->draw(mBackground);
+
+		mWindow->draw(mStaticLevel);
+
+		mWindow->draw(mFinish);
+
+		mWindow->draw(mLight);
+
+		for (int i = 0; i < 6; i++) mEnemies[i]->draw(*mWindow);
+		sf::Time dt = clock.restart();
+
+		// std::cout << "Time: " << dt.asSeconds() << "\n";
+
+		timeSinceLastUpdate += dt;
+		while (timeSinceLastUpdate > sf::seconds(1/60.f))
+		{
+			std::cout << timeSinceLastUpdate.asSeconds() << "\n";
+			timeSinceLastUpdate -= sf::seconds(1 / 60.f);
+			mPlayer->accelerate(0.f, 2.f);
+			mPlayer->update(dt);
+			mPlayer->setVelocity(0.f, 0.f);
+		}
+		mPlayer->draw(*mWindow);
+		mWindow->display();
+	}
+	if (Application::sound) {
+		while (temp.getStatus() == sf::Sound::Playing) {
+
+		}
+		temp.stop();
 	}
 };
