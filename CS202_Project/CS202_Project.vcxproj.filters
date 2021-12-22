@@ -74,7 +74,7 @@
     <ClInclude Include="include\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\menu.h">
+    <ClInclude Include="include\Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Object.hpp">

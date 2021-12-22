@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Utility.h"
+#include "Application.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -26,6 +27,8 @@ class GameState : public State
 		virtual bool		update(sf::Time dt);
 		virtual bool		handleEvent(const sf::Event& event);
 
+		void				playSound();
+
 		void				buildScene();
 		void				adaptPlayerPosition();
 		void				checkCollisions();
@@ -36,6 +39,8 @@ class GameState : public State
 
 		static void			changeLevel(int _level);
 		static int 			getLevel();
+
+		void				fail();
 
 		static void 		save(const std::string& filename);
 		static void 		load(const std::string& filename);

@@ -12,6 +12,7 @@
 LoadingState::LoadingState(StateStack& stack, Context context)
 : State(stack, context)
 {
+
 	sf::RenderWindow& window = *getContext().window;
 	sf::Font& font = context.fonts->get(Fonts::Main);
 	sf::Vector2f viewSize = window.getView().getSize();
@@ -21,7 +22,7 @@ LoadingState::LoadingState(StateStack& stack, Context context)
 	centerOrigin(mLoadingText);
 	mLoadingText.setPosition(viewSize.x / 2.f, viewSize.y / 2.f + 50.f);
 
-    // mBackgroundSprite.setTexture(context.textures->get(Textures::TitleScreen));
+	mBackgroundSprite.setTexture(getContext().textures -> get(Textures::Background));
 
 	mFinishText.setFont(context.fonts->get(Fonts::Main));
 	mFinishText.setString("Loading successfully. Press any key to start!");
@@ -37,15 +38,17 @@ LoadingState::LoadingState(StateStack& stack, Context context)
 	mProgressBar.setPosition(10, mLoadingText.getPosition().y + 40);
 
 	setCompletion(0.f);
-
+	playSound();
 	mLoadingTask.execute();
 }
 
 void LoadingState::draw()
 {
+	playSound();
 	sf::RenderWindow& window = *getContext().window;
 
 	window.setView(window.getDefaultView());
+	window.draw(mBackgroundSprite);
 
     if (mLoadingTask.isFinished()) {
         window.draw(mFinishText);
@@ -59,6 +62,7 @@ void LoadingState::draw()
 
 bool LoadingState::update(sf::Time)
 {
+	playSound();
 	// Update the progress bar from the remote task or finish it
 	if (mLoadingTask.isFinished())
 	{
@@ -72,6 +76,7 @@ bool LoadingState::update(sf::Time)
 
 bool LoadingState::handleEvent(const sf::Event& event)
 {
+	playSound();
     if (mLoadingTask.isFinished() && event.type == sf::Event::KeyPressed) {
         requestStackPop();
 		std::cout << "Menu\n";
@@ -86,4 +91,15 @@ void LoadingState::setCompletion(float percent)
 		percent = 1.f;
 
 	mProgressBar.setSize(sf::Vector2f(mProgressBarBackground.getSize().x * percent, mProgressBar.getSize().y));
+}
+
+void LoadingState::playSound() {
+	if (!Application::sound) {
+		if (Application::mSound[0].getStatus() == sf::Sound::Stopped) Application::mSound[0].play();
+		Application::mSound[1].stop();
+	}
+	else {
+		Application::mSound[0].stop();
+		Application::mSound[1].stop();
+	}
 }

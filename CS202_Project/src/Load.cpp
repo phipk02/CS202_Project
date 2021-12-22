@@ -88,6 +88,7 @@ void LoadState::draw()
 
 bool LoadState::update(sf::Time)
 {
+	playSound();
 	return false;
 }
 
@@ -107,15 +108,15 @@ bool LoadState::handleEvent(const sf::Event& event)
 	{
 		if (mOptionIndex == Slot1)
 		{
-            GameState::load("../saveFile/1.bin");
+            GameState::load("E:/CS202/Project1/Project1/saveFile/1.bin");
             isFinished = true;
 		}
         else if (mOptionIndex == Slot2) {
-            GameState::load("../saveFile/2.bin");
+            GameState::load("E:/CS202/Project1/Project1/saveFile/2.bin");
             isFinished = true;
         }
         else if (mOptionIndex == Slot3) {
-            GameState::load("../saveFile/3.bin");
+            GameState::load("E:/CS202/Project1/Project1/saveFile/3.bin");
             isFinished = true;
         }
 		else if (mOptionIndex == Return)
@@ -167,4 +168,17 @@ void LoadState::updateOptionText()
 void LoadState::load(const std::string& filename) {
     GameState::load(filename);
     isFinished = true;
+	requestStateClear();
+	requestStackPush(States::Game);
+}
+
+void LoadState::playSound() {
+	if (Application::sound) {
+		if (Application::mSound[0].getStatus() == sf::Sound::Stopped) Application::mSound[0].play();
+		Application::mSound[1].stop();
+	}
+	else {
+		Application::mSound[0].stop();
+		Application::mSound[1].stop();
+	}
 }

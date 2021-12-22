@@ -4,6 +4,7 @@
 #define MENUSTATE_H
 
 #include "State.h"
+#include "Application.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -17,6 +18,8 @@ class MenuState : public State
 		virtual void			draw();
 		virtual bool			update(sf::Time dt);
 		virtual bool			handleEvent(const sf::Event& event);
+
+		void					playSound();
 
 		void					updateOptionText();
 

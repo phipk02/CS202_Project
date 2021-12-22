@@ -7,6 +7,7 @@
 
 #include "State.h"
 #include "Game.h"
+#include "Application.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -24,6 +25,8 @@ class LoadState : public State
 		virtual bool			update(sf::Time dt);
 		virtual bool			handleEvent(const sf::Event& event);
 
+		void					playSound();
+
 		void					updateOptionText();
         void                    load(const std::string& filename);
 
@@ -36,7 +39,6 @@ class LoadState : public State
             Slot3,
             Return,
 		};
-
 
 	private:
 		sf::Sprite				mBackgroundSprite;

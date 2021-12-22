@@ -14,8 +14,11 @@ PauseState::PauseState(StateStack& stack, Context context)
 , mOptions()
 , mOptionIndex(0)
 {
+
 	sf::Font& font = context.fonts->get(Fonts::Main);
 	sf::Vector2f viewSize = context.window->getView().getSize();
+
+	mBackgroundSprite.setTexture(getContext().textures->get(Textures::Background));
 
 	context.window -> clear();
 
@@ -60,17 +63,15 @@ void PauseState::draw()
 	sf::RenderWindow& window = *getContext().window;
 	window.setView(window.getDefaultView());
 
-	sf::RectangleShape backgroundShape;
-	backgroundShape.setFillColor(sf::Color(32, 33, 36, 255));
-	backgroundShape.setSize(window.getView().getSize());
+	window.draw(mBackgroundSprite);
 
-	window.draw(backgroundShape);
 	FOREACH(const sf::Text& text, mOptions)
 		window.draw(text);
 }
 
 bool PauseState::update(sf::Time)
 {
+	playSound();
 	return false;
 }
 
@@ -159,4 +160,15 @@ void PauseState::updateOptionText()
 
 	// Red the selected text
 	mOptions[mOptionIndex].setFillColor(sf::Color::Red);
+}
+
+void PauseState::playSound() {
+	if (Application::sound) {
+		if (Application::mSound[0].getStatus() == sf::Sound::Stopped) Application::mSound[0].play();
+		Application::mSound[1].stop();
+	}
+	else {
+		Application::mSound[0].stop();
+		Application::mSound[1].stop();
+	}
 }

@@ -11,8 +11,11 @@ SaveState::SaveState(StateStack& stack, Context context)
 : State(stack, context)
 , mOptions()
 , mOptionIndex(0)
+, mNextOptions()
+, mNextOptionsIndex(0)
 , isFinished(false)
 {
+
 	sf::Texture& texture = context.textures->get(Textures::Background);
 	sf::Font& font = context.fonts->get(Fonts::Main);
 
@@ -57,11 +60,26 @@ SaveState::SaveState(StateStack& stack, Context context)
 	mOptions.push_back(returnOption);
 
     finishText.setFont(font);
-    finishText.setString("Save successfully. Press any key to return!");
+    finishText.setString("Save successfully!");
     centerOrigin(finishText);
-    finishText.setPosition(context.window->getView().getSize() / 2.f);
+    finishText.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, -60.f));
+
+	sf::Text continueOption;
+	continueOption.setFont(font);
+	continueOption.setString("Continue");
+	centerOrigin(continueOption);
+	continueOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, -15.f));
+	mNextOptions.push_back(continueOption);
+
+	sf::Text mainMenuOption;
+	mainMenuOption.setFont(font);
+	mainMenuOption.setString("Return to main menu");
+	centerOrigin(mainMenuOption);
+	mainMenuOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, 15.f));
+	mNextOptions.push_back(mainMenuOption);
 
 	updateOptionText();
+	std::cout << "Save\n";
 }
 
 void SaveState::draw()
@@ -71,7 +89,10 @@ void SaveState::draw()
     window.draw(mBackgroundSprite);
 
     if (isFinished) {
-        window.draw(finishText);
+		window.draw(finishText);
+
+		FOREACH(const sf::Text & text, mNextOptions)
+			window.draw(text);
     }
     else {
         window.draw(mStateName);
@@ -83,6 +104,7 @@ void SaveState::draw()
 
 bool SaveState::update(sf::Time)
 {
+	playSound();
 	return false;
 }
 
@@ -92,22 +114,52 @@ bool SaveState::handleEvent(const sf::Event& event)
 	if (event.type != sf::Event::KeyPressed)
 		return false;
 
-    if (isFinished)
-        requestStackPop();
+	if (isFinished) {
+		if (event.key.code == sf::Keyboard::Up)
+		{
+			// Decrement and wrap-around
+			if (mNextOptionsIndex > 0)
+				mNextOptionsIndex--;
+			else
+				mNextOptionsIndex = mNextOptions.size() - 1;
+
+			updateOptionText();
+		}
+
+		else if (event.key.code == sf::Keyboard::Down)
+		{
+			// Increment and wrap-around
+			if (mNextOptionsIndex < mNextOptions.size() - 1)
+				mNextOptionsIndex++;
+			else
+				mNextOptionsIndex = 0;
+
+			updateOptionText();
+		}
+
+		else if (event.key.code == sf::Keyboard::Return) {
+			if (mNextOptionsIndex == OptionNext::Continue)
+				requestStackPop();
+			else {
+				requestStateClear();
+				requestStackPush(States::Menu);
+			}
+		}
+	}
 
 	if (event.key.code == sf::Keyboard::Return)
 	{
 		if (mOptionIndex == Slot1)
 		{
-			GameState::save("../saveFile/1.bin");
+			GameState::save("E:/CS202/Project1/Project1/saveFile/1.bin");
             isFinished = true;
 		}
         else if (mOptionIndex == Slot2) {
-			GameState::save("../saveFile/2.bin");
+			GameState::save("E:/CS202/Project1/Project1/saveFile/2.bin");
             isFinished = true;
         }
         else if (mOptionIndex == Slot3) {
-			GameState::save("../saveFile/3.bin");
+			GameState::save("E:/CS202/Project1/Project1/saveFile/3.bin");
             isFinished = true;
         }
 		else if (mOptionIndex == Return)
@@ -152,11 +204,26 @@ void SaveState::updateOptionText()
 	FOREACH(sf::Text& text, mOptions)
 		text.setFillColor(sf::Color::White);
 
+	FOREACH(sf::Text & text, mNextOptions)
+		text.setFillColor(sf::Color::White);
+
 	// Red the selected text
 	mOptions[mOptionIndex].setFillColor(sf::Color::Red);
+	mNextOptions[mNextOptionsIndex].setFillColor(sf::Color::Red);
 }
 
 void SaveState::save(const std::string& filename) {
     GameState::save(filename);
     isFinished = true;
+}
+
+void SaveState::playSound() {
+	if (Application::sound) {
+		if (Application::mSound[0].getStatus() == sf::Sound::Stopped) Application::mSound[0].play();
+		Application::mSound[1].stop();
+	}
+	else {
+		Application::mSound[0].stop();
+		Application::mSound[1].stop();
+	}
 }

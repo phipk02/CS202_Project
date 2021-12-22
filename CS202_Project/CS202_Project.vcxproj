@@ -166,7 +166,7 @@
     <ClInclude Include="include\cvehicle.h" />
     <ClInclude Include="include\Foreach.hpp" />
     <ClInclude Include="include\Game.h" />
-    <ClInclude Include="include\menu.h" />
+    <ClInclude Include="include\Menu.h" />
     <ClInclude Include="include\Object.hpp" />
     <ClInclude Include="include\ResourceHolder.hpp" />
     <ClInclude Include="include\ResourceIdentifiers.hpp" />
