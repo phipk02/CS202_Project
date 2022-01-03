@@ -31,4 +31,4 @@ private:
 	ParallelTask			mLoadingTask;
 };
 
-#endif // LOADINGSTATE_H
+#endif // BOOK_LOADINGSTATE_HPP

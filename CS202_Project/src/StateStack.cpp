@@ -1,15 +1,4 @@
-#pragma once
-
 #include "../include/StateStack.h"
-#include "../include/Foreach.h"
-
-#include "Loading.cpp"
-#include "Game.cpp"
-#include "Menu.cpp"
-#include "Pause.cpp"
-#include "Save.cpp"
-#include "Load.cpp"
-#include "Settings.cpp"
 
 #include <cassert>
 
