@@ -39,4 +39,4 @@ class MenuState : public State
 		std::size_t				mOptionIndex;
 };
 
-#endif // MENUSTATE_H
+#endif // BOOK_MENUSTATE_HPP
