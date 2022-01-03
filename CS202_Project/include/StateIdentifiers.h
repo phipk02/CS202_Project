@@ -15,7 +15,8 @@ namespace States
 		Pause, 		// done
         Save, 		// dont but save function
         End,  		//
-		Settings,	// 
+		Settings,	//
+		Fail,
 	};
 }
 
