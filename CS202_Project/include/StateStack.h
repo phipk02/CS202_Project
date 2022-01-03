@@ -6,6 +6,14 @@
 #include "State.h"
 #include "StateIdentifiers.h"
 #include "ResourceIdentifiers.h"
+#include "Loading.h"
+#include "Game.h"
+#include "Menu.h"
+#include "Pause.h"
+#include "Save.h"
+#include "Load.h"
+#include "Settings.h"
+#include "Foreach.h"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>

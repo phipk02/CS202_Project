@@ -16,12 +16,19 @@ namespace Textures
 {
 	enum ID
 	{
-		Bird,
-		Car,
-		Dinosaur,
+		Bird1,
+		Bird2,
+		Car1,
+		Car2,
+		Dinosaur1,
+		Dinosaur2,
 		Player,
-		Truck,
+		Truck1,
+		Truck2,
 		Background,
+		GreenLight,
+		RedLight,
+		Road,
 	};
 }
 
