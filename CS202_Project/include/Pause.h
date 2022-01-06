@@ -39,4 +39,10 @@ class PauseState : public State
 		std::size_t				mOptionIndex;
 };
 
+<<<<<<< HEAD
 #endif // PAUSESTATE_H
+=======
+#endif // PAUSESTATE_H
+
+/////////////////addgddddawsssaaaa
+>>>>>>> a9729ea4e59adb7b4c7630490da1637d319dfe48
