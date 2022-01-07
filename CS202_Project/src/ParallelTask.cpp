@@ -6,7 +6,7 @@ ParallelTask::ParallelTask()
 , mFinished(false)
 {
 }
-
+//set execute
 void ParallelTask::execute()
 {
 	mFinished = false;
