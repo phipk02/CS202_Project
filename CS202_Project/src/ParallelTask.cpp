@@ -1,6 +1,6 @@
 #include "../include/ParallelTask.h"
 
-
+//setup
 ParallelTask::ParallelTask()
 : mThread(&ParallelTask::runTask, this)
 , mFinished(false)
